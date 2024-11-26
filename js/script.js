@@ -1,78 +1,138 @@
-//CRUDS ===> create retireve update delete serach
+var addBtn = document.getElementById("addBtn");
+var tableBody = document.getElementById("tbody");
+var siteName = document.getElementById("siteName");
+var siteUrl = document.getElementById("siteUrl");
 
-var productName = document.getElementById('productName'); //input
-var productPrice = document.getElementById('productPrice'); //input
-var productImage = document.getElementById('productImage');
-var productCat = document.getElementById('productCat');
-var productDesc = document.getElementById('productDesc');
-var dataRow = document.getElementById('dataRow');
-var searchInput = document.getElementById('searchInput');
-var productList = []
-if(localStorage.getItem('products')!==null)
-{
- productList= JSON.parse(localStorage.getItem('products'))
- display() 
+var bookmarks = [];
+updateIndices();
+
+var index = bookmarks.length + 1;
+
+function validateName(str) {
+  var pattern = new RegExp("^[a-zA-Z]{2,}[a-zA-Z\\d\\s]*[a-zA-Z\\d]$", "i");
+  return !!pattern.test(str);
 }
 
-//optinal chaning
-function addProduct()
-{
-   var productObj  = {
-    pName:productName.value,
-    pPrice:productPrice.value,
-    pCat:productCat.value,
-    pDesc:productDesc.value,
-    pImage:(productImage.files[0])?'./img/'+productImage.files[0]?.name:'https://placehold.co/600x400'
-
-   }
-   productList.push(productObj)
-   clearForm()
-   display()
-   localStorage.setItem('products',JSON.stringify(productList))
+function validateURL(str) {
+  var pattern = new RegExp(
+    "^(https?:\\/\\/)?" + 
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + 
+      "((\\d{1,3}\\.){3}\\d{1,3}))" +
+      "(\\:\\d+)?" + 
+      "(\\/[-a-z\\d%_.~+]*)*" +
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + 
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
+  ); 
+  return !!pattern.test(str);
 }
 
-function display()
-{
-    var box = ''
-    for(var i=0;i<productList.length;i++)
-    {
-     box+=`
-      <div class="col-md-3">
-               <div class="product">
-                <img src="${productList[i].pImage}" class="w-100" alt="">
-                <h2 class="h3">${productList[i].pName}</h2>
-                <div class="d-flex justify-content-between">
-                
-                    <h3 class="h5">price <span class="text-danger">${productList[i].pPrice} </span></h3>
-                    <h3 class="h5"> Category ${productList[i].pCat} </h3>
-                </div>
-                <p class="lead">${productList[i].pDesc}</p>
-                <button class="btn btn-outline-warning">update<i class="fa-solid fa-edit"></i></button>
-                <button  onclick="deleteBox(${i})" class="btn btn-outline-danger">delete<i class="fa-solid fa-trash"></i></button>
-               </div>
-            </div>
-     `
+function addBookmark() {
+  index = bookmarks.length + 1;
+  var siteName = document.getElementById("siteName");
+  var siteUrl = document.getElementById("siteUrl");
+  if (
+    siteName.value !== "" &&
+    siteUrl.value !== "" &&
+    validateURL(siteUrl.value)
+  ) {
+    var beginWithHttp = new RegExp("^(https?:\\/\\/)", "i");
+    if (!!!beginWithHttp.test(siteUrl.value)) {
+      siteUrl.value = "https://" + siteUrl.value;
     }
-    dataRow.innerHTML = box
-
+    var bookmark = {
+      index: index,
+      name: siteName.value,
+      url: siteUrl.value,
+    };
+    bookmarks.push(bookmark);
+    tableBody.innerHTML += `
+    <tr id="bookmark${index}">
+      <td class="indexTd">${bookmarks.length}</td>
+      <td>${bookmark.name}</td>
+      <td>
+        <a
+          href="${bookmark.url}"
+          target="_blank"
+          rel="noopener noreferrer">
+          <button id="visitBtn" class="btn btn-success">
+            <i class="fa-regular fa-eye"></i> Visit
+          </button>
+        </a>
+      </td>
+      <td>
+        <button id="deleteBtn" onclick="deleteBookmark(${bookmark.index})" class="btn btn-danger">
+          <i class="fa-regular fa-trash-can"></i> Delete
+        </button>
+      </td>
+    </tr>`;
+    index += 1;
+    siteName.value = "";
+    siteUrl.value = "";
+  }
 }
 
-function clearForm()
-{
-    
-   productName.value = null;
-   productDesc.value = null;
-   productCat.value = null;
-   productPrice.value = null;
-   productImage.value =null
+function updateIndices() {
+  tableBody.innerHTML = ``;
+  for (let i = 0; i < bookmarks.length; i++) {
+    bookmarks[i].index = i + 1;
+    tableBody.innerHTML += `
+    <tr id="bookmark${i + 1}">
+      <td class="indexTd">${bookmarks[i].index}</td>
+      <td>${bookmarks[i].name}</td>
+      <td>
+        <a
+          href="${bookmarks[i].url}"
+          target="_blank"
+          rel="noopener noreferrer">
+          <button id="visitBtn" class="btn btn-success">
+            <i class="fa-regular fa-eye"></i> Visit
+          </button>
+        </a>
+      </td>
+      <td>
+        <button id="deleteBtn" onclick="deleteBookmark(${
+          bookmarks[i].index
+        })" class="btn btn-danger">
+          <i class="fa-regular fa-trash-can"></i> Delete
+        </button>
+      </td>
+    </tr>`;
+  }
+}
 
+function deleteBookmark(index) {
+  var bookmarkTableRow = document.getElementById(`bookmark${index}`);
+  bookmarkTableRow.remove();
+  bookmarks.splice(index - 1, 1);
+  updateIndices();
+  index -= 1;
 }
-function deleteBox(index)
-{
-   productList.splice(index,1)
-   localStorage.setItem('products',JSON.stringify(productList))
-   display()
+
+function styleInputField(type) {
+  var inputField = document.getElementById("site" + type);
+  var isValid =
+    type === "Url"
+      ? validateURL(inputField.value)
+      : validateName(inputField.value);
+  styleElementBasedOnValidation(inputField, isValid);
 }
-function searchFun(){
-  console.log(searchInput.value);
+
+function styleElementBasedOnValidation(element, isValid) {
+  if (isValid) {
+    element.classList.remove("is-invalid");
+    element.classList.add("is-valid");
+  } else {
+    element.classList.remove("is-valid");
+    element.classList.add("is-invalid");
+  }
 }
+
+addBtn.onclick = addBookmark;
+siteName.onkeyup = function () {
+  styleInputField("Name");
+};
+
+siteUrl.onkeyup = function () {
+  styleInputField("Url");
+};

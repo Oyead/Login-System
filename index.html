@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/all.css">
-    <link rel="stylesheet" href="css/all.min.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Crud app</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption:wght@400;700&family=Pacifico&family=Righteous&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/images/image.png" /> 
+<link rel="stylesheet" href="fontawesome-free-6.6.0-web/css/all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Document</title>
+  </head>
+  <body class="text-center ft-main">
+    <div class="container">
+      <header>
+        <h1 class="ft-main-header my-5 m-auto">Bookmarker</h1>
+      </header>
+      <main>
+        <form class="form my-4">
+          <caption>
+            <h2 class="ft-sec-header my-4">
+              <i class="fa-solid fa-bookmark"></i>
+              Bookmark your favorite sites
+              <i class="fa-solid fa-bookmark"></i>
+            </h2>
+          </caption>
+          <div class="mb-3 text-start">
+            <label for="siteName" class="form-label"><i class="fa-solid fa-book-bookmark"></i> Site Name</label>
+            <input type="text" class="form-control" id="siteName" />
+          </div>
 
+          <div class="mb-3 text-start">
+            <label for="siteUrl" class="form-label"
+              ><i class="fa-solid fa-link"></i> Site URL</label
+            >
+            <input type="text" class="form-control" id="siteUrl" />
+            <div
+              id="addBtn"
+              class="addbookmark btn btn-danger d-block m-auto mt-4 py-2 px-4">
+              Add Bookmark
+            </div>
+          </div>
+        </form>
 
-<body>
-  <form  class="w-75 mx-auto my-5">
-
-    <div class="form-floating mb-3">
-        <input type="text" class="form-control"  id="productName" placeholder="name@example.com">
-        <label for="productName">productName:</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="productPrice" placeholder="">
-        <label for="productPrice">productPrice:</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="file" class="form-control" id="productImage" placeholder="">
-        <label for="productImage">productImage:</label>
-      </div>
-
-
-      <div class="form-floating mb-3">
-        <select class="form-select" id="productCat" aria-label="Floating label select example">
-          <option selected>Open this select menu</option>
-          <option value="tvs">mobile</option>
-          <option value="pcs">ipad</option>
-          <option value="mobile">headphone</option>
-        </select>
-        <label for="productCat">Works with selects</label>
-      </div>
-
-      <div class="form-floating mb-3">
-        <textarea class="form-control" placeholder="Leave a comment here" id="productDesc" style="height: 100px"></textarea>
-        <label for="productDesc">productDesc:</label>
-      </div>
-      <button type="button"  onclick="addProduct()" class="btn btn-outline-info ms-auto d-block">add Product</button>
-</form>
-
-  <div class="container">
-    <input type="text" class="form-control my-4" id="searchInput" oninput="searchFun()">
-    <div class="row gy-4" id="dataRow">
-       
+        <table class="table">
+          <thead>
+            <th>Index</th>
+            <th>Website Name</th>
+            <th>Visit</th>
+            <th>Delete</th>
+          </thead>
+          <tbody id="tbody" class="fw-normal"></tbody>
+        </table>
+      </main>
     </div>
-  </div>
-  
-   <script src="js/all.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
