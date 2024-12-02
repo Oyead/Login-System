@@ -1,138 +1,135 @@
-var addBtn = document.getElementById("addBtn");
-var tableBody = document.getElementById("tbody");
-var siteName = document.getElementById("siteName");
-var siteUrl = document.getElementById("siteUrl");
+var loginBtn = document.getElementById('loginBtn')
+var signUpBtn = document.getElementById('signUpBtn')
+var logoutBtn=document.getElementById('logoutBtn')
 
-var bookmarks = [];
-updateIndices();
+var emailLogin = document.getElementById('emailLogin')
+var passwordLogin = document.getElementById('passwordLogin')
 
-var index = bookmarks.length + 1;
+var nameSignUp = document.getElementById('nameSignUp')
+var emailSignUp = document.getElementById('emailSignUp')
+var passwordSignUp = document.getElementById('passwordSignUp')
 
-function validateName(str) {
-  var pattern = new RegExp("^[a-zA-Z]{2,}[a-zA-Z\\d\\s]*[a-zA-Z\\d]$", "i");
-  return !!pattern.test(str);
+var signUp = document.getElementById('signUp')
+var login = document.getElementById('login')
+
+var signUpMsg = document.getElementById('signUpMsg')
+var loginMsg = document.getElementById('loginMsg')
+
+var signUpCard = document.getElementById('signUpCard')
+var loginCard = document.getElementById('loginCard')
+var home=document.getElementById('home')
+
+login.addEventListener('click', showSignUp)
+signUp.addEventListener('click', showLogin)
+
+function showSignUp() {
+  loginCard.classList.add("d-none");
+  loginCard.classList.remove("d-flex");
+  signUpCard.classList.add("d-flex");
+  signUpCard.classList.remove("d-none");
+  home.classList.add("d-none")
+  home.classList.remove("d-flex")
+  loginMsg.innerHTML = '';
 }
 
-function validateURL(str) {
-  var pattern = new RegExp(
-    "^(https?:\\/\\/)?" + 
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + 
-      "((\\d{1,3}\\.){3}\\d{1,3}))" +
-      "(\\:\\d+)?" + 
-      "(\\/[-a-z\\d%_.~+]*)*" +
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + 
-      "(\\#[-a-z\\d_]*)?$",
-    "i"
-  ); 
-  return !!pattern.test(str);
+function showLogin() {
+  loginCard.classList.add("d-flex");
+  loginCard.classList.remove("d-none");
+  signUpCard.classList.add("d-none");
+  signUpCard.classList.remove("d-flex");
+  home.classList.add("d-none")
+  home.classList.remove("d-flex")
+  signUpMsg.innerHTML = '';
+}
+var welcomeName=document.getElementById('welcomeName')
+var username;
+function showHome(username) {
+  welcomeName.innerHTML='Welcome '
+  loginCard.classList.add("d-none");
+  loginCard.classList.remove("d-flex");
+  signUpCard.classList.add("d-none");
+  home.classList.remove("d-none");
+  home.classList.add("d-flex")
+  welcomeName.innerHTML+=username
 }
 
-function addBookmark() {
-  index = bookmarks.length + 1;
-  var siteName = document.getElementById("siteName");
-  var siteUrl = document.getElementById("siteUrl");
-  if (
-    siteName.value !== "" &&
-    siteUrl.value !== "" &&
-    validateURL(siteUrl.value)
-  ) {
-    var beginWithHttp = new RegExp("^(https?:\\/\\/)", "i");
-    if (!!!beginWithHttp.test(siteUrl.value)) {
-      siteUrl.value = "https://" + siteUrl.value;
+
+var emailsArr;
+
+(function () {
+  if (localStorage.getItem('data') == null)
+    emailsArr = [];
+  else {
+    emailsArr = JSON.parse(localStorage.getItem('data'));
+  }
+})();
+
+signUpBtn.addEventListener('click', signUpAcc);
+
+function signUpAcc() {
+
+  if (signUpCheck()) {
+    signUpMsg.innerHTML = `<span style="color: rgb(40, 167, 69);">sucess</span>`;
+    var account = {
+      aName: nameSignUp.value,
+      aEmail: emailSignUp.value,
+      aPass: passwordSignUp.value
     }
-    var bookmark = {
-      index: index,
-      name: siteName.value,
-      url: siteUrl.value,
-    };
-    bookmarks.push(bookmark);
-    tableBody.innerHTML += `
-    <tr id="bookmark${index}">
-      <td class="indexTd">${bookmarks.length}</td>
-      <td>${bookmark.name}</td>
-      <td>
-        <a
-          href="${bookmark.url}"
-          target="_blank"
-          rel="noopener noreferrer">
-          <button id="visitBtn" class="btn btn-success">
-            <i class="fa-regular fa-eye"></i> Visit
-          </button>
-        </a>
-      </td>
-      <td>
-        <button id="deleteBtn" onclick="deleteBookmark(${bookmark.index})" class="btn btn-danger">
-          <i class="fa-regular fa-trash-can"></i> Delete
-        </button>
-      </td>
-    </tr>`;
-    index += 1;
-    siteName.value = "";
-    siteUrl.value = "";
+
+    emailsArr.push(account);
+    localStorage.setItem('data', JSON.stringify(emailsArr))
   }
+
 }
 
-function updateIndices() {
-  tableBody.innerHTML = ``;
-  for (let i = 0; i < bookmarks.length; i++) {
-    bookmarks[i].index = i + 1;
-    tableBody.innerHTML += `
-    <tr id="bookmark${i + 1}">
-      <td class="indexTd">${bookmarks[i].index}</td>
-      <td>${bookmarks[i].name}</td>
-      <td>
-        <a
-          href="${bookmarks[i].url}"
-          target="_blank"
-          rel="noopener noreferrer">
-          <button id="visitBtn" class="btn btn-success">
-            <i class="fa-regular fa-eye"></i> Visit
-          </button>
-        </a>
-      </td>
-      <td>
-        <button id="deleteBtn" onclick="deleteBookmark(${
-          bookmarks[i].index
-        })" class="btn btn-danger">
-          <i class="fa-regular fa-trash-can"></i> Delete
-        </button>
-      </td>
-    </tr>`;
+loginBtn.addEventListener('click', loginAcc);
+
+function loginAcc() {
+  if (loginCheck())
+    showHome(username);
+}
+
+logoutBtn.addEventListener('click',function() {
+emailLogin.value='';
+passwordLogin.value='';
+  showLogin();
+});
+
+function signUpCheck() {
+  var checkResult = true;
+
+  if (nameSignUp.value == '' || nameSignUp.value == '' || nameSignUp.value == '') {
+    checkResult = false;
+    signUpMsg.innerHTML = `<span style="color: #DC3541;">All inputs are required</span>`
   }
-}
 
-function deleteBookmark(index) {
-  var bookmarkTableRow = document.getElementById(`bookmark${index}`);
-  bookmarkTableRow.remove();
-  bookmarks.splice(index - 1, 1);
-  updateIndices();
-  index -= 1;
-}
-
-function styleInputField(type) {
-  var inputField = document.getElementById("site" + type);
-  var isValid =
-    type === "Url"
-      ? validateURL(inputField.value)
-      : validateName(inputField.value);
-  styleElementBasedOnValidation(inputField, isValid);
-}
-
-function styleElementBasedOnValidation(element, isValid) {
-  if (isValid) {
-    element.classList.remove("is-invalid");
-    element.classList.add("is-valid");
-  } else {
-    element.classList.remove("is-valid");
-    element.classList.add("is-invalid");
+  for (var i = 0; i < emailsArr.length; i++) {
+    if (emailSignUp.value == emailsArr[i].aEmail) {
+      checkResult = false;
+      signUpMsg.innerHTML = `<span style="color: #DC3541;">email already exists</span>`
+      break;
+    }
   }
+
+  return checkResult
 }
 
-addBtn.onclick = addBookmark;
-siteName.onkeyup = function () {
-  styleInputField("Name");
-};
+function loginCheck() {
 
-siteUrl.onkeyup = function () {
-  styleInputField("Url");
-};
+
+  if (emailLogin.value == '' || passwordLogin.value == '') {
+    loginMsg.innerHTML = `<span style="color: #DC3541;">All inputs are required</span>`
+    return false;
+  }
+
+  for (var i = 0; i < emailsArr.length; i++) {
+    if (emailLogin.value == emailsArr[i].aEmail && passwordLogin.value == emailsArr[i].aPass) {
+      username=emailsArr[i].aName;
+      return true;
+    }
+  }
+
+  loginMsg.innerHTML = `<span style="color: #DC3541;">incorrect email or password</span>`
+return false;
+
+}
