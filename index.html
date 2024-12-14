@@ -1,63 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/Styles.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/Styles.css" />
+  </head>
 
-<body>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <img src="img/logo.png" alt="Weather logo" class="logo" />
+          <div class="logo-info d-inline-block align-middle">
+            <h1 class="site-title">Weather</h1>
+            <span class="site-description">tagline goes here</span>
+          </div>
+        </a>
 
-  <div class="cards d-flex justify-content-center vh-100">
-    <div class="login mt-5 d-flex text-center flex-column gap-3 p-5" style="background-color: var(--main-color);"
-      id="loginCard">
-      <h1>Smart Login System</h1>
-      <div class="form-contents d-flex flex-column gap-3 position-relative  translate-middle-x">
-        <input type="text" placeholder="Enter your email" class="form-control"
-          style="background-color: var(--main-color);" id="emailLogin">
-        <input type="password" placeholder="Enter your password" class="form-control"
-          style="background-color: var(--main-color);" id="passwordLogin">
-        <div id="loginMsg"></div>
-        <button id="loginBtn" class="btn mt-1">Login</button>
-      </div>
-
-      <p class="text-white fs-6  mt">Don't have an account? <span class="btn" id="login">Sign Up</span></p>
-    </div>
-
-    <div class="signUp mt-5 d-none text-center flex-column gap-3 p-5" style="background-color: var(--main-color);"
-      id="signUpCard">
-      <h1>Smart Login System</h1>
-      <div class="form-contents d-flex flex-column gap-3 position-relative translate-middle-x" id="signUpForm">
-        <input type="text" placeholder="Enter your name" class="form-control"
-          style="background-color: var(--main-color);" id="nameSignUp">
-        <input type="text" placeholder="Enter your email" class="form-control"
-          style="background-color: var(--main-color);" id="emailSignUp">
-        <input type="password" placeholder="Enter password" class="form-control"
-          style="background-color: var(--main-color);" id="passwordSignUp">
-        <div id="signUpMsg"></div>
-        <button id="signUpBtn" class="btn mt-1">Sign Up</button>
-      </div>
-
-      <p class="text-white fs-6  mt">You have an account? <span class="btn" id="signUp">Signin</span></p>
-    </div>
-
-    <div class="home container d-none justify-content-center align-content-center vh-100" id="home">
-      <div class="navbar position-fixed fixed-top p-3">
-        <div class="container">
-          <a href="">SMART LOGIN</a>
-          <button class="btn" id="logoutBtn">Logout</button>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div
+          class="collapse navbar-collapse mt-4 my-lg-0"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-center">
+            <li class="nav-item active">
+              <a class="nav-link" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">News</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Live cameras</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Photos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+          </ul>
         </div>
       </div>
+    </nav>
 
-      <div class="welcome d-flex position-relative  ">
-        <h1 class="position-absolute  top-50 translate-middle-y" id="welcomeName"> </h1>
+    <section class="hero">
+      <div class="container">
+        <form class="find-form position-relative">
+          <input
+            id="findInput"
+            class="form-control w-100"
+            type="text"
+            placeholder="Find your location..."
+          />
+          <button id="btnFind" class="btn-find position-absolute" type="button">
+            Search
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <div class="forecast-table">
+      <div class="container">
+        <div id="forecast" class="row rounded-3 forecast-container">
+          <div class="col-lg-4">
+            <div class="forecast today rounded rounded-3">
+              <div
+                id="today"
+                class="forecast-header px-3 d-flex justify-content-between"
+              >
+                <div class="day fw-semibold"></div>
+                <div class="date text-light"></div>
+              </div>
+              <div id="current" class="forecast-content px-3">
+                <div class="location fs-4"></div>
+                <div class="time me-auto"></div>
+                <div class="degree d-flex justify-content-between">
+                  <div class="num"></div>
+                  <div class="forecast-icon align-self-end"></div>
+                </div>
+                <p class="custom fs-5"></p>
+                <div class="mt-4 d-flex justify-content-between"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tomorrow" class="col-lg-4 mt-3 mt-lg-0">
+            <div class="text-center h-100 rounded-2 forecast tomorrow">
+              <div class="forecast-header fw-semibold px-3">
+                <div class="day"></div>
+              </div>
+              <div class="forecast-content px-3">
+                <div class="forecast-icon"></div>
+                <div class="degree fs-2"></div>
+                <p class="fs-5 mb-0"></p>
+                <p class="custom fs-5"></p>
+              </div>
+            </div>
+          </div>
+          <div id="afterTomorrow" class="col-lg-4 mt-3 mt-lg-0">
+            <div class="text-center h-100 rounded-2 forecast">
+              <div class="forecast-header fw-semibold px-3">
+                <div class="day"></div>
+              </div>
+              <div class="forecast-content px-3">
+                <div class="forecast-icon"></div>
+                <div class="degree fs-2"></div>
+                <p class="fs-5 mb-0"></p>
+                <p class="custom fs-5"></p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <script src="js/script.js"></script>
-</body>
 
+    <footer class="footer">
+      <div class="container">
+        <div class="row flex-column flex-md-row align-items-center mb-3">
+          <div class="col-lg-8">
+            <form class="subscribe-form position-relative">
+              <input
+                id="subscribeInput"
+                class="form-control w-100"
+                type="text"
+                placeholder="Enter your email to subscribe..."
+              />
+              <button
+                id="btnSubscribe"
+                class="btn-find position-absolute"
+                type="button"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+          <div
+            class="col-lg-3 d-flex justify-content-center ms-lg-auto mt-4 mt-lg-0 pt-2 pt-lg-0"
+          >
+            <div class="social-links">
+              <a href="#" class=""><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#" class=""><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" class=""><i class="fa-brands fa-google-plus"></i></a>
+              <a href="#" class=""><i class="fa-brands fa-pinterest"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
+      integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
 </html>
